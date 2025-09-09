@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My posts</title>
+</head>
+<body>
+    <h1><%= user.name %>'s Posts👇</h1>
+    <a href="/user/home">Back to home</a>
+    <a href="/posts/new">Create new post</a>
+    <hr>
+
+    <% if(posts.length === 0){ %>
+        <p>You have no posts yet 😔</p>
+    <% } else { %>
+        <% posts.forEach(post => { %>
+            <div>
+                <h3><%= post.title %></h3>
+                <p><%= post.description %></p>
+                <% if(post.imagePath){ %>
+                    <img src="<%= post.imagePath %>" style="width:250px;height:250px;"/>
+                <% } %>
+                <hr>
+            </div>
+        <% }) %>
+    <% } %>
+</body>
+</html>

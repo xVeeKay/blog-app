@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .signup-container {
+            max-width: 400px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 24px 32px 16px 32px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        h2 { text-align: center; margin-bottom: 24px; }
+        label { display: block; margin-bottom: 6px; font-weight: bold; }
+        input[type="text"], input[type="email"], input[type="password"], input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover { background: #0056b3; }
+        .bottom-text {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 15px;
+        }
+        .bottom-text a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .bottom-text a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <%if(typeof error!=='undefined'){%>
+            <p style="color: rgb(215, 62, 62);"><%=error%></p>
+        <%}%>
+        <form action="/auth/signup" method="POST" enctype="multipart/form-data">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required autocomplete="name">
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required autocomplete="email">
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required autocomplete="new-password">
+
+            <label for="image">Profile Image (optional)</label>
+            <input type="file" id="image" name="avatar" accept="image/*">
+
+            <button type="submit">Sign Up</button>
+        </form>
+        <div class="bottom-text">
+            Already a user? <a href="/auth/login">Login</a>
+        </div>
+    </div>
+</body>
+</html>

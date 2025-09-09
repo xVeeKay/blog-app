@@ -1,0 +1,21 @@
+Routes:
+GET /          → render homepage (maybe latest blog posts)
+
+GET  /signup   → show signup page (form)
+POST /signup   → handle signup form submission
+
+GET  /login    → show login page (form)
+POST /login    → handle login
+GET  /logout   → logout user
+
+GET  /profile        → show logged-in user profile page
+POST /update-avatar  → (optional) handle avatar upload
+
+GET  /posts/new      → show "create new post" page
+POST /posts/new      → handle form submission for creating post
+GET  /posts/:id      → show single blog post
+GET  /posts          → show all posts
+
+POST /posts/:id/comment  → submit comment form
+
+
