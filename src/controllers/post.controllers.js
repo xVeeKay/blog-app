@@ -26,7 +26,26 @@ const myPosts=asyncHandler(async(req,res)=>{
     res.render("myPosts",{user:req.user,posts})
 })
 
+const toggleLike=asyncHandler(async(req,res)=>{
+    const {id}=req.params;
+    const user=req.user;
+
+    const post=await Post.findById(id);
+    if(!post) return new Error("Post not found!");
+
+    const isLiked=post.likes.includes(user._id);
+    if(isLiked){
+        post.likes.pull(user._id);
+    }
+    else{
+        post.likes.push(user._id);
+    }
+    await post.save();
+    res.redirect(req.get("Referrer") || "/");
+})
+
 module.exports={
     newPost,
-    myPosts
+    myPosts,
+    toggleLike,
 }

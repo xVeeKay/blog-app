@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>Home Page</title>
     <style>
+        body{
+            margin: 5px;
+            padding: 5px;
+        }
         .my-post { background-color: #e2b6fb; }
         .other-post { background-color: #a7e8bd; }
     </style>
@@ -22,12 +26,22 @@
         <p style="text-align:center;">No posts yet 😔</p>
     <%}else{%>
         <%posts.forEach((p)=>{%>
-            <div class="<%= p.email === user.email ? 'my-post' : 'other-post' %>">
+            <div style="position: relative;" class="<%= p.email === user.email ? 'my-post' : 'other-post' %>">
                 <h3><%=p.title%></h3>
                 <p><%=p.description%></p>
                 <%if(p.imagePath){%>
                     <img src="<%= p.imagePath %>" style="width:250px;height:250px;"/>
                 <%}%>
+                <form action="/posts/<%=p._id%>/like" method="post">
+                    <button style="margin: 5px;">
+                        <% if(p.likes.some(like=>like.toString()===user._id.toString())){ %>
+                            Liked❤️
+                        <%}else{%>
+                            Like❤️
+                        <%}%>
+                    </button>
+                </form>
+                <span style="position: absolute;bottom: 0;right: 0; padding: 5px;"><%=p.likes.length%> Likes</span>
             </div>
             <hr>
         <%})%>

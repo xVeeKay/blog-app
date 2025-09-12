@@ -5,11 +5,11 @@ const postSchema=new mongoose.Schema({
     description:{type:String,required:true,trim:true},
     email:{type:String,required:true,lowercase:true},
     imagePath:String,
-    likes:{type:Number,default:0},
+    likes:[{type:mongoose.Schema.Types.ObjectId,ref:"User"}],
     comments:[
         {
-            userEmail:String,
-            comment:String,
+            userId:{type:mongoose.Schema.Types.ObjectId,ref:"User",required:true},
+            comment:{type:String,required:true,trim:true},
             createdAt:{type:Date,default:Date.now()}
         }
     ]
