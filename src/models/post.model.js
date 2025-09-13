@@ -9,6 +9,7 @@ const postSchema=new mongoose.Schema({
     comments:[
         {
             userId:{type:mongoose.Schema.Types.ObjectId,ref:"User",required:true},
+            username:{type:String,required:true},
             comment:{type:String,required:true,trim:true},
             createdAt:{type:Date,default:Date.now()}
         }

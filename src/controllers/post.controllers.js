@@ -15,7 +15,6 @@ const newPost=asyncHandler(async(req,res)=>{
         const result=await uploadToCloudinary(req.file.buffer,"blog-app/postImages");
         imagePath=result.secure_url;
     }
-    console.log(imagePath)
     const newPost=new Post({title,description,email:req.user.email,imagePath});
     await newPost.save();
     res.redirect('/posts/mine')
@@ -44,8 +43,22 @@ const toggleLike=asyncHandler(async(req,res)=>{
     res.redirect(req.get("Referrer") || "/");
 })
 
+const addComment=asyncHandler(async(req,res)=>{
+    const {id}=req.params;
+    const user=req.user;
+    const {comment}=req.body;
+
+    const post=await Post.findById(id);
+    if(!post) return res.status(404).send("Post not found!")
+    
+    post.comments.push({userId:user._id,username:user.name,comment});
+    await post.save();
+    res.redirect(req.get("Referrer") || "/");
+})
+
 module.exports={
     newPost,
     myPosts,
     toggleLike,
+    addComment,
 }

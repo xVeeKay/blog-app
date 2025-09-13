@@ -4,48 +4,100 @@
     <meta charset="UTF-8">
     <title>Home Page</title>
     <style>
+        html,body{
+            height: 100%;
+        }
         body{
             margin: 5px;
             padding: 5px;
+            display: flex;
+            flex-direction: column;
+        }
+        .container{
+            flex: 1;
         }
         .my-post { background-color: #e2b6fb; }
         .other-post { background-color: #a7e8bd; }
+
+        .comment-visible{
+            display: block;
+        }
+        .comment-not-visible{
+            display: none;
+        }
+        .comment-box{
+            background-color: #333;
+            width: 50%;
+            color: #e2b6fb;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
-    <div style="display: flex;flex-direction: row;align-items: center;justify-content: center;background-color: hsl(278, 100%, 83%);">
-        <img src="<%= user.imagePath %>" alt="image" style="width: 100px;height: 100px;border-radius: 50%;"/><br><br>
-        <h1>Hello👋, <%= user.name %></h1> <br><br>
-        <a href="/posts/mine" style="margin-left: 40%;"><button>Your Posts</button></a><br><br>
-        <a href="/posts/new"><button>New Post</button></a><br><br>
-        <a href="/user/logout"><button>Logout</button></a>
-    </div>
-    <hr>
-    <h1 style="text-align: center;">Feed😎</h1>
-    <%if(posts.length===0){%>
-        <p style="text-align:center;">No posts yet 😔</p>
-    <%}else{%>
-        <%posts.forEach((p)=>{%>
-            <div style="position: relative;" class="<%= p.email === user.email ? 'my-post' : 'other-post' %>">
-                <h3><%=p.title%></h3>
-                <p><%=p.description%></p>
-                <%if(p.imagePath){%>
-                    <img src="<%= p.imagePath %>" style="width:250px;height:250px;"/>
-                <%}%>
-                <form action="/posts/<%=p._id%>/like" method="post">
-                    <button style="margin: 5px;">
-                        <% if(p.likes.some(like=>like.toString()===user._id.toString())){ %>
-                            Liked❤️
+    <div class="container">
+        <div style="display: flex;flex-direction: row;align-items: center;margin:10px ;justify-content: center;background-color: hsl(278, 100%, 83%);padding: 10px; border-radius: 10px;">
+            <img src="<%= user.imagePath %>" alt="image" style="width: 100px;height: 100px;border-radius: 50%;"/><br><br>
+            <h1>Hello👋, <%= user.name %></h1> <br><br>
+            <a href="/posts/mine" style="margin-left: 40%;"><button>Your Posts</button></a><br><br>
+            <a href="/posts/new"><button>New Post</button></a><br><br>
+            <a href="/user/logout"><button>Logout</button></a>
+        </div>
+        <hr>
+        <h1 style="text-align: center;">Feed😎</h1>
+        <%if(posts.length===0){%>
+            <p style="text-align:center;">No posts yet 😔</p>
+        <%}else{%>
+            <%posts.forEach((p)=>{%>
+                <div style="position: relative; padding: 10px; border-radius: 10px; margin: 10px;" class="<%= p.email === user.email ? 'my-post' : 'other-post' %>">
+                    <h3><%=p.title%></h3>
+                    <p><%=p.description%></p>
+                    <%if(p.imagePath){%>
+                        <img src="<%= p.imagePath %>" style="width:250px;height:250px;"/>
+                    <%}%>
+                    <form action="/posts/<%=p._id%>/like" method="post">
+                        <button style="margin: 5px;">
+                            <% if(p.likes.some(like=>like.toString()===user._id.toString())){ %>
+                                Liked👍
+                            <%}else{%>
+                                Like❤️
+                            <%}%>
+                        </button>
+                    </form>
+                    <span style="position: absolute;bottom: 0;right: 0; padding: 10px; font-weight: 700;"><%=p.likes.length%> Likes</span>
+                    <form action="/posts/<%=p._id%>/comment" method="post">
+                        <input placeholder="add a comment..." name="comment" required/>
+                        <button style="margin: 10px;" type="submit">Comment💬</button>
+                    </form>
+                    <button data-post-id="<%= p._id %>" onclick="toggleComments(this)" >View all <%= p.comments.length %> comments</button>
+                    <div style="margin: 10px;padding: 10px;" data-post-id="<%= p._id %>" class="comment-box comment-not-visible">
+                        <%if(p.comments.length===0){%>
+                            <p style="text-align:center;">No comments yet 😒</p>
                         <%}else{%>
-                            Like❤️
+                            <%p.comments.forEach(c=>{%>
+                                <div class="inner-comment">
+                                    <span style="font-weight: bolder;font-size: 17px;"><%= c.username %>: </span>
+                                    <span style="font-style: italic;"><%= c.comment %></span>
+                                </div>
+                            <%})%>
                         <%}%>
-                    </button>
-                </form>
-                <span style="position: absolute;bottom: 0;right: 0; padding: 5px;"><%=p.likes.length%> Likes</span>
-            </div>
-            <hr>
-        <%})%>
-    <%}%>
+                    </div>
+                </div>
+                <hr>
+            <%})%>
+        <%}%>
+    </div>
+    <footer style="background-color: #333; position: relative;margin-bottom: 10px;color: white;padding: 10px;text-align: center;">
+        Made with 🧠 and ❤️ by Vishal
+        <span style="position: absolute; right: 10px;"><a style="text-decoration: none; color: #e2b6fb;text-align: center;" target="_blank" href="https://github.com/xVeeKay/blog-app/tree/main">Github for project</a></span>
+    </footer>
+    <script>
+        function toggleComments(button){
+            const postId=button.getAttribute('data-post-id');
+            const commentDiv=document.querySelector(`.comment-box[data-post-id="${postId}"]`);
+            commentDiv.classList.toggle("comment-not-visible");
+            commentDiv.classList.toggle("comment-visible");
+        }
 
+    </script>
 </body>
 </html>
